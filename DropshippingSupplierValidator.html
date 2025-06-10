@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropshipping Supplier Validator | Verify Legitimate Suppliers</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --light: #f9fafb;
+            --dark: #1f2937;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f3f4f6;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+        
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            color: var(--dark);
+        }
+        
+        .search-box {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 50px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .search-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+        
+        .search-box button {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .search-box button:hover {
+            background-color: #4338ca;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .feature-card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .results {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            display: none;
+        }
+        
+        .supplier-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .supplier-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #e5e7eb;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .supplier-details h2 {
+            margin-bottom: 5px;
+        }
+        
+        .supplier-details p {
+            color: #6b7280;
+        }
+        
+        .score-card {
+            background-color: var(--light);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .score-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .score-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .score-bar {
+            height: 10px;
+            background-color: #e5e7eb;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        .score-progress {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 1s ease-in-out;
+        }
+        
+        .verification-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .verification-icon {
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .verification-text h4 {
+            margin-bottom: 5px;
+        }
+        
+        .verification-text p {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .alert-warning {
+            background-color: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning);
+        }
+        
+        .alert-danger {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--danger);
+        }
+        
+        .alert-icon {
+            margin-right: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background-color: var(--light);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .user-reviews {
+            margin-top: 30px;
+        }
+        
+        .review-card {
+            background-color: var(--light);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .review-author {
+            font-weight: bold;
+        }
+        
+        .review-date {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .review-rating {
+            color: var(--warning);
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .footer-links a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .supplier-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .supplier-logo {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">Supplier<span>Validator</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">How It Works</a></li>
+                    <li><a href="#">Supplier Database</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="hero">
+            <h1>Dropshipping Supplier Validator</h1>
+            <p>Verify suppliers in real-time with legitimacy scoring, shipping time accuracy, price alerts, and scam reports. Fill the gap after Google's spam updates targeting shady suppliers.</p>
+            
+            <div class="search-box">
+                <input type="text" placeholder="Enter supplier name (e.g., AliExpress, CJ Dropshipping, etc.)" id="supplierInput">
+                <button id="searchBtn">Validate Supplier</button>
+            </div>
+        </section>
+        
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">✅</div>
+                <h3>Legitimacy Scoring</h3>
+                <p>Comprehensive checks including company registration verification, domain age analysis, and business license validation.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🚚</div>
+                <h3>Shipping Time Accuracy</h3>
+                <p>Historical data analysis to verify if suppliers meet their promised delivery times based on real user reports.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">📉</div>
+                <h3>Price Fluctuation Alerts</h3>
+                <p>Track sudden cost spikes and identify suppliers with unstable pricing that could hurt your margins.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🚨</div>
+                <h3>Scam Reports</h3>
+                <p>Crowdsourced data from thousands of dropshippers to identify suppliers with fraudulent practices.</p>
+            </div>
+        </section>
+        
+        <section class="results" id="resultsSection">
+            <div class="supplier-info">
+                <div class="supplier-logo" id="supplierLogo">SV</div>
+                <div class="supplier-details">
+                    <h2 id="supplierName">Supplier Name</h2>
+                    <p id="supplierPlatform">Platform: AliExpress</p>
+                </div>
+            </div>
+            
+            <div class="score-card">
+                <div class="score-header">
+                    <h3>Trust Score</h3>
+                    <div class="score-value" id="trustScore">0</div>
+                </div>
+                <div class="score-bar">
+                    <div class="score-progress" id="scoreProgress"></div>
+                </div>
+                <p>Based on our verification of 12 factors including company registration, user reviews, and historical performance.</p>
+            </div>
+            
+            <div class="alert alert-warning" id="priceAlert" style="display: none;">
+                <div class="alert-icon">⚠️</div>
+                <div>
+                    <h4>Price Fluctuation Detected</h4>
+                    <p>This supplier has shown significant price changes (32% average variation) in the last 30 days which may affect your profit margins.</p>
+                </div>
+            </div>
+            
+            <div class="alert alert-danger" id="scamAlert" style="display: none;">
+                <div class="alert-icon">🚨</div>
+                <div>
+                    <h4>Scam Reports</h4>
+                    <p>3 users have reported issues with this supplier in the last 60 days. Proceed with caution.</p>
+                </div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="avgShipping">0</div>
+                    <div class="stat-label">Avg. Shipping Days</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="successRate">0%</div>
+                    <div class="stat-label">Order Success Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="responseTime">0h</div>
+                    <div class="stat-label">Avg. Response Time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="userRating">0.0</div>
+                    <div class="stat-label">User Rating (50)</div>
+                </div>
+            </div>
+            
+            <h3>Verification Details</h3>
+            
+            <div class="verification-item">
+                <div class="verification-icon">✅</div>
+                <div class="verification-text">
+                    <h4>Business Registration Verified</h4>
+                    <p>Confirmed with Chinese business registry (valid until 2025)</p>
+                </div>
+            </div>
+            
+            <div class="verification-item">
+                <div class="verification-icon">✅</div>
+                <div class="verification-text">
+                    <h4>Domain Age</h4>
+                    <p>Registered for 4 years 7 months (trust indicator)</p>
+                </div>
+            </div>
+            
+            <div class="verification-item">
+                <div class="verification-icon">⚠️</div>
+                <div class="verification-text">
+                    <h4>Shipping Time Accuracy</h4>
+                    <p>23% of orders arrived later than advertised (industry average 15%)</p>
+                </div>
+            </div>
+            
+            <div class="verification-item">
+                <div class="verification-icon">✅</div>
+                <div class="verification-text">
+                    <h4>Payment Security</h4>
+                    <p>Supports secure payment methods with buyer protection</p>
+                </div>
+            </div>
+            
+            <div class="user-reviews">
+                <h3>User Reviews</h3>
+                
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-author">DropshipperPro92</div>
+                        <div class="review-date">May 15, 2024</div>
+                    </div>
+                    <div class="review-rating">★★★★☆</div>
+                    <p>"Products are generally good quality but shipping can be inconsistent. Had one order take 28 days instead of the promised 14."</p>
+                </div>
+                
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-author">EcomEntrepreneur</div>
+                        <div class="review-date">April 2, 2024</div>
+                    </div>
+                    <div class="review-rating">★★★☆☆</div>
+                    <p>"Prices increased suddenly after my product went viral. Communication was poor when I asked about it."</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container footer-content">
+            <div class="logo">Supplier<span>Validator</span></div>
+            <p>The most trusted tool for dropshippers to verify suppliers in 2024</p>
+            
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">API</a>
+                <a href="#">Blog</a>
+                <a href="#">Contact Us</a>
+            </div>
+            
+            <p class="copyright">© 2024 SupplierValidator. All rights reserved. Created for dropshippers after Google's spam updates.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchBtn = document.getElementById('searchBtn');
+            const supplierInput = document.getElementById('supplierInput');
+            const resultsSection = document.getElementById('resultsSection');
+            
+            // Sample supplier data
+            const suppliers = {
+                'aliexpress': {
+                    name: 'AliExpress',
+                    platform: 'AliExpress',
+                    logoText: 'AE',
+                    trustScore: 82,
+                    avgShipping: 18,
+                    successRate: 94,
+                    responseTime: 12,
+                    userRating: 4.2,
+                    hasPriceAlert: true,
+                    hasScamAlert: false
+                },
+                'cj dropshipping': {
+                    name: 'CJ Dropshipping',
+                    platform: 'CJ Dropshipping',
+                    logoText: 'CJ',
+                    trustScore: 76,
+                    avgShipping: 15,
+                    successRate: 89,
+                    responseTime: 8,
+                    userRating: 3.9,
+                    hasPriceAlert: false,
+                    hasScamAlert: true
+                },
+                'spy': {
+                    name: 'Spy Fulfillment',
+                    platform: 'Independent',
+                    logoText: 'SF',
+                    trustScore: 68,
+                    avgShipping: 22,
+                    successRate: 82,
+                    responseTime: 24,
+                    userRating: 3.5,
+                    hasPriceAlert: true,
+                    hasScamAlert: true
+                }
+            };
+            
+            searchBtn.addEventListener('click', function() {
+                const searchTerm = supplierInput.value.trim().toLowerCase();
+                let foundSupplier = null;
+                
+                // Check if search term matches any supplier
+                for (const key in suppliers) {
+                    if (searchTerm.includes(key)) {
+                        foundSupplier = suppliers[key];
+                        break;
+                    }
+                }
+                
+                if (foundSupplier) {
+                    // Update UI with supplier data
+                    document.getElementById('supplierName').textContent = foundSupplier.name;
+                    document.getElementById('supplierPlatform').textContent = `Platform: ${foundSupplier.platform}`;
+                    document.getElementById('supplierLogo').textContent = foundSupplier.logoText;
+                    document.getElementById('trustScore').textContent = foundSupplier.trustScore;
+                    document.getElementById('avgShipping').textContent = foundSupplier.avgShipping;
+                    document.getElementById('successRate').textContent = `${foundSupplier.successRate}%`;
+                    document.getElementById('responseTime').textContent = `${foundSupplier.responseTime}h`;
+                    document.getElementById('userRating').textContent = foundSupplier.userRating;
+                    
+                    // Animate progress bar
+                    const progressBar = document.getElementById('scoreProgress');
+                    progressBar.style.width = '0%';
+                    setTimeout(() => {
+                        progressBar.style.width = `${foundSupplier.trustScore}%`;
+                    }, 100);
+                    
+                    // Show/hide alerts
+                    document.getElementById('priceAlert').style.display = foundSupplier.hasPriceAlert ? 'flex' : 'none';
+                    document.getElementById('scamAlert').style.display = foundSupplier.hasScamAlert ? 'flex' : 'none';
+                    
+                    // Show results section
+                    resultsSection.style.display = 'block';
+                    
+                    // Scroll to results
+                    resultsSection.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    alert('Supplier not found in our database. Please try another name or check back later as we continuously update our records.');
+                }
+            });
+            
+            // Allow search on Enter key
+            supplierInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
